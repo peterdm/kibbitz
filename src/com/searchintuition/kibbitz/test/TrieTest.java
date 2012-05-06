@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.searchintuition.kibbitz.TermIndex;
+import com.searchintuition.kibbitz.TermScorer;
 
 /**
  * @author Peter
@@ -37,7 +38,7 @@ public class TrieTest {
 		
 		try {
 			ti.loadFromQueryLog(testFile);
-			ti.showTerms();
+			//ti.showTerms();
 
 		} catch (IOException ioe) {
 			// squash
@@ -101,5 +102,27 @@ public class TrieTest {
 		} catch (ClassNotFoundException cnfe) {
 			fail("ClassNotFoundException: " + cnfe);
 		}
+	}
+
+
+	@Test
+	public final void testScoring() {
+		String query = "real";
+		Map<String, Integer> completions = ti.prefixMap(query);
+		
+		TermScorer scorer = new TermScorer(query, completions);
+		
+		System.out.println("Alpha sort");
+		for (Map.Entry<String, Integer> cursor : completions.entrySet()) {		
+			System.out.println(cursor.getKey() + "(" + cursor.getValue() + ")");
+		}
+		
+		System.out.println("=========");
+		System.out.println("Scored sort");
+		for (Map.Entry<String, Integer> cursor : scorer.getTerms()) {		
+			System.out.println(cursor.getKey() + "(" + cursor.getValue() + ")");
+		}
+		
+		
 	}
 }
