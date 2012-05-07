@@ -6,6 +6,7 @@ package com.searchintuition.kibbitz;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -17,6 +18,7 @@ public class QueryTokenizer implements Iterable<String>, Iterator<String>
 	private ArrayList<String> indexTerms;
 	private int idx = 0;
 	private Pattern splitter = Pattern.compile("\\s+");
+	private Pattern acceptWords = Pattern.compile("^\\w");
 	
 	public QueryTokenizer() {
 		indexTerms = new ArrayList<String>(30);
@@ -44,7 +46,7 @@ public class QueryTokenizer implements Iterable<String>, Iterator<String>
 		for (int head=0; head<queryTerms.length; head++) {
 			
 			// insert head term ("[chocolate] ice cream sandwich")
-			indexTerms.add(queryTerms[head]);
+			this.addTerm(queryTerms[head]);
 			
 			// insert following term multi-grams ("chocolate ice", "chocolate ice cream", "chocolate ice cream sandwich")
 			if (queryTerms.length > head+1) {
@@ -55,13 +57,24 @@ public class QueryTokenizer implements Iterable<String>, Iterator<String>
 					buff.append(" ");
 					buff.append(queryTerms[tail]);
 					
-					indexTerms.add(buff.toString());
+					this.addTerm(buff.toString());
 				}
 			}
 		}
 		
 	}
 	
+	private void addTerm(String term)
+	{
+		// Only add terms that begin with word characters [a-zA-Z0-9]
+		// this way we strip out all the leading punctuation generated
+		// by the gram-generator in tokenize.
+		
+		Matcher m = acceptWords.matcher(term);
+		if (m.lookingAt()) {
+			indexTerms.add(term);
+		}
+	}
 	
 	public Iterator<String> iterator() {
 		return this;

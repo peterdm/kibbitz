@@ -4,9 +4,11 @@
 package com.searchintuition.kibbitz;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -62,14 +64,16 @@ public class TermIndex {
 		
 		String query;
 		QueryTokenizer tok = new QueryTokenizer();
-		int i = 0;
+
 		while ((query = reader.readLine()) != null) {		
-			if (i%1000==0) System.out.print(++i + " ");
 			for(String term : tok.setQuery(query)) {
 				addTerm(term);
 			}
 		}
 	}
+
+
+	
 	
 	public int addTerm(String term) {
 		
@@ -116,4 +120,29 @@ public class TermIndex {
 		return trie.size();
 	}
 
+
+	
+	
+	// For testing
+	public static void main(String[] args) {
+		String testFile = "/Users/Peter/etsy/data/queries.txt";
+		TermIndex ti = new TermIndex();
+		System.out.println("Loading from file");
+		
+		try {
+			ti.loadFromQueryLog(testFile);
+			System.out.println("Serializing");
+			ti.save();
+			System.out.println("Serialized");
+		} catch (IOException ioe) {
+			System.out.println("IOException: " + ioe);
+		}
+		
+		// The Trie consumes too much memory to fit into a 256M heap.
+		
+		// Reverting to a less-fancy binary search on a memory-mapped file
+		// File needs to contain <term> <doc-frequency>
+	}
+	
+	
 }
