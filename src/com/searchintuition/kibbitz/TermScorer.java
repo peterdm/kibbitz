@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 public class TermScorer {
 
 	String query = null;
-	ArrayList<Map.Entry<String, Integer>> completions = null;
+	List<Map.Entry<String, Integer>> completions = null;
 	
 	// Given a collection of term suggestions
 	// score, order and return the requested amount.

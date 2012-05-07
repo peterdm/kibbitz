@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TermFile {
 
@@ -14,6 +16,21 @@ public class TermFile {
 	public TermFile(String filename) {
 		this.termFile = new File(filename);
 	}
+	
+	public Map<String, Integer> prefixSearch(String query) {
+	
+		Map<String, Integer> results = 
+				new HashMap<String, Integer>(100);
+		
+		for( String result : this.binarySearch(query)) {
+			String[] detail = result.split("\t");
+			results.put(detail[0], Integer.parseInt(detail[1]));
+		}
+		
+		return results;
+	}
+	
+	
 	/**
 	 * **
 	 * Based on ExternalBinarySearch example from 
