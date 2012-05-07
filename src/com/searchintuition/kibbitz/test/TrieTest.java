@@ -6,13 +6,14 @@ package com.searchintuition.kibbitz.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.util.Map;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.searchintuition.kibbitz.TermIndex;
@@ -24,8 +25,29 @@ import com.searchintuition.kibbitz.TermScorer;
  */
 public class TrieTest {
 
-	final String testFile = "/Users/Peter/etsy/infochimps_aol-search-data/AOL-user-ct-collection/short.txt";
+	final static String testFile = "/Users/Peter/etsy/data/queries.txt";
 	TermIndex ti;
+	
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	
+		// Load up the index from the text files and serialize it to disk
+		TermIndex termi = new TermIndex();
+		try {
+			termi.loadFromQueryLog(testFile);
+			termi.save();
+			//ti.showTerms();
+
+		} catch (IOException ioe) {
+			throw ioe;
+		} finally {
+			termi = null;
+		}
+	}
+
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
 	
 	/**
 	 * @throws java.lang.Exception
@@ -37,11 +59,11 @@ public class TrieTest {
 		ti = new TermIndex();
 		
 		try {
-			ti.loadFromQueryLog(testFile);
+			ti.load();
 			//ti.showTerms();
 
 		} catch (IOException ioe) {
-			// squash
+			throw ioe;
 		}
 	}
 
@@ -50,6 +72,7 @@ public class TrieTest {
 	 */
 	@After
 	public void tearDown() throws Exception {
+		ti = null;
 	}
 
 	@Test
@@ -80,7 +103,32 @@ public class TrieTest {
 		assertFalse(completions.containsKey("rocky"));
 	}
 
+
+	@Test
+	public final void testScoring() {
+		String query = "re";
+		Map<String, Integer> completions = ti.prefixMap(query);
+		
+		TermScorer scorer = new TermScorer(query, completions);
+		
+		/*
+		System.out.println("Alpha sort");
+		for (Map.Entry<String, Integer> cursor : completions.entrySet()) {		
+			System.out.println(cursor.getKey() + "(" + cursor.getValue() + ")");
+		}
+		
+		System.out.println("=========");
+		System.out.println("Scored sort");
+		for (Map.Entry<String, Integer> cursor : scorer.getTerms()) {		
+			System.out.println(cursor.getKey() + "(" + cursor.getValue() + ")");
+		}
+		*/
+		
+		assertEquals(scorer.getTerms().get(0).getKey(), "real estate");
+		
+	}
 	
+	/*
 	@Test
 	public final void testSerialization() {
 		
@@ -103,26 +151,5 @@ public class TrieTest {
 			fail("ClassNotFoundException: " + cnfe);
 		}
 	}
-
-
-	@Test
-	public final void testScoring() {
-		String query = "real";
-		Map<String, Integer> completions = ti.prefixMap(query);
-		
-		TermScorer scorer = new TermScorer(query, completions);
-		
-		System.out.println("Alpha sort");
-		for (Map.Entry<String, Integer> cursor : completions.entrySet()) {		
-			System.out.println(cursor.getKey() + "(" + cursor.getValue() + ")");
-		}
-		
-		System.out.println("=========");
-		System.out.println("Scored sort");
-		for (Map.Entry<String, Integer> cursor : scorer.getTerms()) {		
-			System.out.println(cursor.getKey() + "(" + cursor.getValue() + ")");
-		}
-		
-		
-	}
+	*/
 }

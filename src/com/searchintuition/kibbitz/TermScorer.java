@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * @author Peter
@@ -92,6 +93,7 @@ class FrequencyAndLengthComparator implements Comparator<Map.Entry<String,Intege
  */
 class FrequencyAndNGramComparator implements Comparator<Map.Entry<String,Integer>> {
 	private String query = null;
+	private Pattern splitter = Pattern.compile("\\s+");
 	
 	public FrequencyAndNGramComparator(String query) {
 		this.query = query;
@@ -108,7 +110,7 @@ class FrequencyAndNGramComparator implements Comparator<Map.Entry<String,Integer
 	}
 	
 	private double score(Map.Entry<String,Integer> term) {
-		int numTokens = term.getKey().split(" ").length;
+		int numTokens = splitter.split(term.getKey()).length;
 		double score = Math.log((double)numTokens+1) * Math.log(term.getValue()+1);
 		//System.out.println(term.getKey()+":"+score);
 		return score;

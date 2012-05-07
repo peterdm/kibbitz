@@ -3,6 +3,7 @@
  */
 package com.searchintuition.kibbitz;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -24,7 +25,7 @@ public class TermIndex {
 	protected PatriciaTrie<String, Integer> trie;
 	
 	public TermIndex() {
-		trie = new PatriciaTrie<String, Integer>(StringKeyAnalyzer.CHAR);
+		trie = new PatriciaTrie<String, Integer>(StringKeyAnalyzer.BYTE);
 	}
 	
 	public void load() throws IOException, ClassNotFoundException {
@@ -55,15 +56,16 @@ public class TermIndex {
 	
 	public void loadFromQueryLog(String filename) throws IOException {
 		// Create a new QueryLogReader, use readLine(true)
-		QueryLogReader reader;
+		BufferedReader reader;
 		
-		reader = new QueryLogReader(new FileReader(filename));
+		reader = new BufferedReader(new FileReader(filename));
 		
 		String query;
-		
-		// the *true* flag only returns queries which have clickthrus
-		while ((query = reader.readLine(true)) != null) {			
-			for(String term : new QueryTokenizer(query)) {
+		QueryTokenizer tok = new QueryTokenizer();
+		int i = 0;
+		while ((query = reader.readLine()) != null) {		
+			if (i%1000==0) System.out.print(++i + " ");
+			for(String term : tok.setQuery(query)) {
 				addTerm(term);
 			}
 		}

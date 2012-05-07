@@ -6,6 +6,7 @@ package com.searchintuition.kibbitz;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.regex.Pattern;
 
 /**
  * @author Peter
@@ -14,17 +15,25 @@ import java.util.NoSuchElementException;
 public class QueryTokenizer implements Iterable<String>, Iterator<String> 
 {
 	private ArrayList<String> indexTerms;
-	int idx = 0;
+	private int idx = 0;
+	private Pattern splitter = Pattern.compile("\\s+");
 	
-	public QueryTokenizer(String query) {
-		indexTerms = new ArrayList<String>();
+	public QueryTokenizer() {
+		indexTerms = new ArrayList<String>(30);
+	}
+	
+	
+	public QueryTokenizer setQuery(String query) {
+		idx = 0;
+		indexTerms.clear();
 		tokenize(query);
+		return this;
 	}
 	
 	private void tokenize(String query) {
 		
 		// Split on space
-		String[] queryTerms = query.split("\\s+");
+		String[] queryTerms = splitter.split(query);
 		
 		// Here we're loading all possible ordered grams 
 		// (E.g. "chocolate ice cream sandwich" := 
@@ -39,7 +48,8 @@ public class QueryTokenizer implements Iterable<String>, Iterator<String>
 			
 			// insert following term multi-grams ("chocolate ice", "chocolate ice cream", "chocolate ice cream sandwich")
 			if (queryTerms.length > head+1) {
-				StringBuffer buff = new StringBuffer(queryTerms[head]);
+				StringBuffer buff = new StringBuffer(query.length()*4);
+				buff.append(queryTerms[head]);
 
 				for (int tail=head+1; tail<queryTerms.length; tail++) {
 					buff.append(" ");
