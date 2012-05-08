@@ -1,13 +1,12 @@
 package com.searchintuition.kibbitz.test;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
+import com.searchintuition.kibbitz.PrefixServer;
 import com.searchintuition.kibbitz.TermFile;
 import com.searchintuition.kibbitz.TermScorer;
 
@@ -38,6 +37,12 @@ public class TermFileTest {
 		for (Map.Entry<String, Integer> cursor : scorer.getTerms(5)) {		
 			assertTrue(cursor.getKey().startsWith("real estate"));
 		}
+	}
+	
+	@Test
+	public final void testServer() {
+		PrefixServer server = new PrefixServer(10);
+		server.runQueries("/Users/Peter/etsy/data/randoms.txt");
 	}
 
 }

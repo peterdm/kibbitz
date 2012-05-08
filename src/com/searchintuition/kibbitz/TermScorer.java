@@ -34,6 +34,9 @@ public class TermScorer {
 	}
 	
 	public List<Map.Entry<String,Integer>> getTerms(int numberToReturn) {
+		if (this.completions.size() < numberToReturn)
+			return this.completions;
+		
 		return this.completions.subList(0, numberToReturn-1);
 	}
 
