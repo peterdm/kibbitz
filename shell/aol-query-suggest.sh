@@ -1,4 +1,5 @@
 #!/bin/sh
+export LC_ALL=C
 
 CLASSPATH=../dist/kibbitz.jar
 

@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class PrefixServer {
 
-	final int CACHE_SIZE = 25000;
+	final int CACHE_SIZE = 100000;
 	final String termFile = "/Users/Peter/etsy/data/index.txt";
 
 	private TermFile terms = null;
@@ -35,7 +35,11 @@ public class PrefixServer {
 
 	public List<String> runQuery(String prefix) {
 
+		// Flatten diacritics and accent marks
+		prefix = FilterUtils.deAccent(prefix);
+		
 		if (cache.containsKey(prefix)) {
+			System.out.print(" <CACHE HIT> ");
 			return cache.get(prefix);
 		}
 
@@ -69,8 +73,16 @@ public class PrefixServer {
 
 			String query;
 			while ((query = br.readLine()) != null) {
-				System.out.println("--- " + query + " ---");
-				for(String result : this.runQuery(query)) {
+				System.out.print("--- " + query);
+				
+				final long startTime = System.nanoTime();
+				List<String> results = this.runQuery(query);
+				final long endTime = System.nanoTime();
+
+				
+				System.out.println(" (" + (endTime-startTime)/1000000 + "ms) ---");
+				
+				for(String result : results) {
 					System.out.println(result);
 				}
 			}
@@ -95,7 +107,7 @@ public class PrefixServer {
 	}
 	
 	protected static void usage() {
-		System.out.println("Usage: java PrefixServer <queryFile> <top-N-results");
+		System.out.println("Usage: java PrefixServer <queryFile> <top-N-results>");
 		return;
 	}
 

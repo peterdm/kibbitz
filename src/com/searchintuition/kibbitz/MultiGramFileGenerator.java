@@ -7,10 +7,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class MultiGramFileGenerator {
 
+
+public class MultiGramFileGenerator {
+	
 	public static void generateMultiGramFile(String inputQueryFilename, String outputGramFilename) throws IOException {
-		// Create a new QueryLogReader, use readLine(true)  TODO: rewrite this in AWK
 		BufferedReader reader;
 		BufferedWriter writer;
 		
@@ -22,11 +23,22 @@ public class MultiGramFileGenerator {
 
 		while ((query = reader.readLine()) != null) {		
 			for(String term : tok.setQuery(query)) {
-				writer.append(term);  
-				writer.newLine();
+
+				// Flatten diacritics and accent marks
+				term = FilterUtils.deAccent(term);
+				
+				// Skip all term phrases ending with a stopword or random punctuation
+				String[] parts = term.split(" ");
+				String lastTerm = parts[parts.length-1];
+				
+				if (!lastTerm.matches("\\W") && !FilterUtils.isStopword(lastTerm)) {
+					writer.append(term);  
+					writer.newLine();
+				}
 			}
 		}
 	}
+	
 	
 	public static void main(String[] args) {
 		if (args.length != 2) {

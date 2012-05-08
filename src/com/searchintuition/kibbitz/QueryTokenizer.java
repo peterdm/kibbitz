@@ -6,7 +6,6 @@ package com.searchintuition.kibbitz;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -18,7 +17,7 @@ public class QueryTokenizer implements Iterable<String>, Iterator<String>
 	private ArrayList<String> indexTerms;
 	private int idx = 0;
 	private Pattern splitter = Pattern.compile("\\s+");
-	private Pattern acceptWords = Pattern.compile("^\\w");
+
 	
 	public QueryTokenizer() {
 		indexTerms = new ArrayList<String>(30);
@@ -70,8 +69,7 @@ public class QueryTokenizer implements Iterable<String>, Iterator<String>
 		// this way we strip out all the leading punctuation generated
 		// by the gram-generator in tokenize.
 		
-		Matcher m = acceptWords.matcher(term);
-		if (m.lookingAt()) {
+		if (FilterUtils.startsWithWordCharacter(term)) {
 			indexTerms.add(term);
 		}
 	}

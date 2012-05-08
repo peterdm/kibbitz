@@ -1,0 +1,57 @@
+Kibbitz prefix server
+
+The prefix server will respond to autocomplete queries based on the provided
+index file (see Index below) with a requested number of suggestions.
+
+
+Scoring Algorithm
+
+This particular scoring algorithm gives preference
+to completions more frequently seen in the index, and also completions
+with more terms:  Log(terms in completion + 1) * Log(document frequency + 1)
+
+
+Responsiveness
+
+Time taken is proportional to the number of matches found, 
+so longer queries (e.g. "jesse mc":3ms) tend to return much faster (1-5ms) than
+shorter ones (e.g. "je":325ms).  The sample queries file contains a sample of about
+1MM queries from the AOL dataset, each truncated randomly anywhere from the 
+full length down to 2 characters (for performance reasons, single character 
+queries were omitted).
+
+
+Throughput
+
+With about 1:3 queries hitting a 25,000 result LRU cache, this
+single-threaded program handled an average of 250qps on a dual-core MacBook Pro.
+The machine was CPU-bound during this test, which probably points to the 
+computing burden of all the string-comparison required by the binary search.
+(Profiling would confirm).  Given sufficient memory, using an in-memory 
+Ternary-search Tree would cause prefix-search to require only log(N) in-memory
+char-comparisons vs the current binary-search requirement of log(N) on-disk
+string-comparisons.
+
+
+Index
+  
+The index is stored on disk.  (Due to it's size, it cannot be stored
+in 256MB of memory.)  With sufficient memory available, a Ternary-search-tree
+or maybe a Radix trie (like a Patricia-trie) would further optimize lookups.
+
+The on-disk index is accessed through a binary-search to find terms with a 
+matching prefix, and then adjacent (also-matching) terms are collected and
+returned as well.
+
+
+Usage
+
+Create index:   Extract AOL query files into /data directory
+(about 4 min)	[shell]$ ./aol-query-indexer.sh
+		
+Create samples:	[shell]$ ./aol-as-you-type-query-generator.sh
+
+Run samples:	[shell]$ ./aol-query-suggest.sh ../data/randoms.txt 5
+(for 5 suggestions per query)
+
+
