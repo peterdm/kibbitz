@@ -22,7 +22,7 @@ public class MultiGramFileGenerator {
 
 		while ((query = reader.readLine()) != null) {		
 			for(String term : tok.setQuery(query)) {
-				writer.append(term);
+				writer.append(term);  
 				writer.newLine();
 			}
 		}
