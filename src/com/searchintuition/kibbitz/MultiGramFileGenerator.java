@@ -8,7 +8,22 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 
-
+/**
+ * Uses QueryTokenizer to expand queries at index-time using multi-word-grams.
+ * E.g.  "chocolate ice cream sandwich" := 
+ * 	"chocolate", "chocolate ice", "chocolate ice cream", "chocolate ice cream sandwich",
+ *  "ice", "ice cream", "ice cream sandwich", 
+ *  "cream", "cream sandwich",
+ *  "sandwich"
+ *  
+ *  Also a place for additional index-time analysis:
+ *   - Normalization of diacritic marks
+ *   - Eliminating terms that end in a stopword
+ *   - Eliminating terms that end in a non-word character
+ *   
+ * @author Peter
+ *
+ */
 public class MultiGramFileGenerator {
 	
 	public static void generateMultiGramFile(String inputQueryFilename, String outputGramFilename) throws IOException {

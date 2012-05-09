@@ -11,6 +11,14 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
+ * TermScorer holds an ordered List of suggested query-completions.
+ * The sorting/scoring strategy in use below is FrequencyAndNGramComparator.
+ * 
+ * The way to use this is to pass in the unordered result set from 
+ * the prefix-search of the index-file.  Then getTerms() returns an
+ * ordered list of the desired size.
+ * 
+ * 
  * @author Peter
  *
  */

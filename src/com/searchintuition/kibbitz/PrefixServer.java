@@ -9,6 +9,20 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Can execute a batch of completions from a query-file.  Performance improves
+ * as the cache warms up.
+ * 
+ * Hides a termFile (index-file) and a cache of popular queries+completions
+ * 
+ * Usage: java PrefixServer <queryFile> <top-N-results>
+ * 
+ * @author Peter
+ *
+ * TODO: Make this thread-safe, and have it listen on a port, return json, etc...
+ *
+ */
 public class PrefixServer {
 
 	final int CACHE_SIZE = 100000;

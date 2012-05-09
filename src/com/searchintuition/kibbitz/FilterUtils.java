@@ -7,7 +7,12 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+/**
+ * Useful clutter
+ * 
+ * @author Peter
+ *
+ */
 public class FilterUtils {
 
 	static final Pattern diacriticPattern = 

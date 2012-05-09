@@ -8,6 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * TermFile - A class which wraps the index-file, 
+ * and knows how to run prefix-searches.
+ * 
+ * @author Peter
+ *
+ */
 public class TermFile {
 
 	private File termFile = null;

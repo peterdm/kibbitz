@@ -1,4 +1,17 @@
 #!/bin/sh
+
+############
+# Extracts meaningful (clickedthru) queries from the AOL corpus.
+# Only the first of a consecutive series of (the same) query is retained.
+# Word-gram expansion is performed, terms are counted, and a final
+# alphabetized file (index.txt) is produced in the following format:
+#
+# <search-query1>TAB<document frequency>
+# <search-query2>TAB<document frequency>
+# ...
+# 
+############
+
 export LC_ALL=C
 
 INPUTFILE=../data/queries.txt
@@ -7,6 +20,7 @@ SORTED_OUTPUTFILE=../data/sortedgrams.txt
 REPEATED_OUTPUTFILE=../data/repeatedgrams.txt
 INDEXFILE=../data/index.txt
 
+mkdir -p ../data
 
 # Distill only outputs queries.  And queries that generated clickthrus
 # It also surpresses consecutive searchs that are the same.

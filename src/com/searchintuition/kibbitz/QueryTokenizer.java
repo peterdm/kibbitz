@@ -9,6 +9,15 @@ import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
 /**
+ * QueryTokenizer Expands "chocolate ice cream sandwich" := 
+ * 	"chocolate", "chocolate ice", "chocolate ice cream", "chocolate ice cream sandwich",
+ *  "ice", "ice cream", "ice cream sandwich", 
+ *  "cream", "cream sandwich",
+ *  "sandwich"
+ *  
+ *  Only adds expansions which start with a word-character [a-z0-9]
+ *  to help cut down on clutter that doesn't look useful to autocomplete.
+ *  
  * @author Peter
  *
  */
