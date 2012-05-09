@@ -49,7 +49,7 @@ matching prefix, and then adjacent (also-matching) terms are collected and
 returned as well.
 
 
-Optimization ideas
+Other Optimization ideas
 
 1. Shard the index:  An on-disk binary-search requires worst-case log(N) seeks 
 and string-comparisons plus M file-read and string-comparisons to return all 
@@ -59,9 +59,10 @@ average number of seek+string-comparisons (in this test by about 25%).
 Since the process is CPU-bound, prefix-search should speed up by up to 25%
 for smaller values of M.
 
-2. SSD:  Moving the index to a solid-state drive would reap the benefits of this
-particular device.  First, seek-time drops enormously as there's no moving head to
-align, and second, data transfer gets much faster.
+2. SSD:  If the application could be tuned with a sharded index, multi-processor
+server, etc... to the point that this became IO-bound, some further optimizations
+might be found by moving the index to SSDs to take advantage of their improved 
+seek-time and data-transfer characteristics.
 
 
 Usage
@@ -71,7 +72,7 @@ Create index:   Extract AOL query files into top-level directory
 		
 Create samples:	[shell]$ ./aol-as-you-type-query-generator.sh
 
-Run samples:	[shell]$ ./aol-query-suggest.sh ../data/randoms.txt 5
+Run samples:	[shell]$ ./aol-query-suggest.sh ../data/index.txt ../data/randoms.txt 5
 (for 5 suggestions per query)
 
 

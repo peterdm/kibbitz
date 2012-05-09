@@ -16,7 +16,7 @@ import java.util.Map;
  * 
  * Hides a termFile (index-file) and a cache of popular queries+completions
  * 
- * Usage: java PrefixServer <queryFile> <top-N-results>
+ * Usage: java PrefixServer <indexFile> <queryFile> <top-N-results>
  * 
  * @author Peter
  *
