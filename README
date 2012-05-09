@@ -49,6 +49,21 @@ matching prefix, and then adjacent (also-matching) terms are collected and
 returned as well.
 
 
+Optimization ideas
+
+1. Shard the index:  An on-disk binary-search requires worst-case log(N) seeks 
+and string-comparisons plus M file-read and string-comparisons to return all 
+adjacent matches.  Sharding the index (e.g. Based upon the first character 
+typed, so:  a.idx, b.idx, ... 0.idx, ... 9idx) would significantly reduce the 
+average number of seek+string-comparisons (in this test by about 25%).
+Since the process is CPU-bound, prefix-search should speed up by up to 25%
+for smaller values of M.
+
+2. SSD:  Moving the index to a solid-state drive would reap the benefits of this
+particular device.  First, seek-time drops enormously as there's no moving head to
+align, and second, data transfer gets much faster.
+
+
 Usage
 
 Create index:   Extract AOL query files into top-level directory

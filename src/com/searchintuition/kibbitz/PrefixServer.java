@@ -26,25 +26,23 @@ import java.util.Map;
 public class PrefixServer {
 
 	final int CACHE_SIZE = 100000;
-	final String termFile = "/Users/Peter/etsy/data/index.txt";
 
 	private TermFile terms = null;
 	private int numberOfSuggestions;
 
 	Map<String, List<String>> cache = null;
 
-	public PrefixServer() {
-		this(10);
+	public PrefixServer(String termFile) {
+		this(termFile, 10);
 	}
 
-	public PrefixServer(int numberOfSuggestions) {
-
+	public PrefixServer(String termFile, int numberOfSuggestions) {
 		this.numberOfSuggestions = numberOfSuggestions;
 
 		this.cache = Collections
 				.synchronizedMap(new LruCache<String, List<String>>(CACHE_SIZE));
 
-		this.terms = new TermFile(this.termFile);
+		this.terms = new TermFile(termFile);
 	}
 
 	public List<String> runQuery(String pre) {
@@ -113,17 +111,17 @@ public class PrefixServer {
 	}
 
 	public static void main(String[] args) {
-		if (args.length != 2) {
+		if (args.length != 3) {
 			usage();
 			System.exit(0);
 		}
 		
-		PrefixServer server = new PrefixServer(Integer.parseInt(args[1]));
-		server.runQueries(args[0]);
+		PrefixServer server = new PrefixServer(args[0], Integer.parseInt(args[2]));
+		server.runQueries(args[1]);
 	}
 	
 	protected static void usage() {
-		System.out.println("Usage: java PrefixServer <queryFile> <top-N-results>");
+		System.out.println("Usage: java PrefixServer <indexFile> <queryFile> <top-N-results>");
 		return;
 	}
 
