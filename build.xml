@@ -1,13 +1,12 @@
 <?xml version="1.0" ?> 
-<project name="kibbitz" default="compress">
-
+<project name="kibbitz" default="compress">	
 	<target name="init">
 		<mkdir dir="build/classes" />
 		<mkdir dir="dist" />
 	</target>
 
 	<target name="compile" depends="init">
-		<javac srcdir="src" destdir="build/classes" />
+		<javac srcdir="src" destdir="build/classes" includeantruntime="false" />
 	</target>
 	
 	<target name="compress" depends="compile">

@@ -25,7 +25,7 @@ public class MultiGramFileGenerator {
 			for(String term : tok.setQuery(query)) {
 
 				// Flatten diacritics and accent marks
-				term = FilterUtils.deAccent(term);
+				term = FilterUtils.unAccent(term);
 				
 				// Skip all term phrases ending with a stopword or random punctuation
 				String[] parts = term.split(" ");

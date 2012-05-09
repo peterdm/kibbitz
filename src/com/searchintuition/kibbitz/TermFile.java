@@ -19,6 +19,9 @@ public class TermFile {
 	
 	public Map<String, Integer> prefixSearch(String query) {
 	
+		// Trim any leading/trailing whitespace
+		query = query.trim();
+		
 		Map<String, Integer> results = 
 				new HashMap<String, Integer>(100);
 		
@@ -39,6 +42,7 @@ public class TermFile {
 	 * @return
 	 */
 	public List<String> binarySearch(String string) {
+
 	    List<String> result = new ArrayList<String>();
 	    try {
 	        RandomAccessFile raf = new RandomAccessFile(this.termFile, "r");
@@ -96,6 +100,7 @@ public class TermFile {
 	}
 	
 	private int compare(String entry, String toMatch) {
+		if (entry==null) return 1;  // weird edge case causing problems with accented chars
 		String entryTerm = entry.split("\t")[0];
 		return entryTerm.compareTo(toMatch);
 	}

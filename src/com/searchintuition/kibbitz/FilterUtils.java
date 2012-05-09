@@ -1,7 +1,9 @@
 package com.searchintuition.kibbitz;
 
 import java.text.Normalizer;
+import java.text.Normalizer.Form;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,15 +18,6 @@ public class FilterUtils {
 
 	static final Pattern acceptWords = Pattern.compile("^\\w");
 	
-	/* 
-	 * From http://stackoverflow.com/questions/1008802/converting-symbols-accent-letters-to-english-alphabet
-	 */
-	public static String deAccent(String str) {
-	    String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD); 
-	    return diacriticPattern.matcher(nfdNormalizedString).replaceAll("");
-	}
-
-	
 	public static boolean isStopword(String str) {
 		return Arrays.binarySearch(stopwords, str) >= 0;
 	}
@@ -32,5 +25,23 @@ public class FilterUtils {
 	public static boolean startsWithWordCharacter(String str) {
 		Matcher m = acceptWords.matcher(str);
 		return m.lookingAt();
+	}
+	
+	public static String unAccent(String s) {
+		//
+		// JDK1.5
+		// use sun.text.Normalizer.normalize(s, Normalizer.DECOMP, 0);
+		//
+		return Normalizer.normalize(s, Form.NFD).replaceAll(
+				"\\p{InCombiningDiacriticalMarks}+", "");
+	}
+
+	public static void main(String args[]) throws Exception {
+		System.out.println(Locale.getDefault());
+		String value = "é à î ó ì _ @";
+		System.out.println(value);
+		System.out.println(FilterUtils.unAccent(value));
+		System.out.println(Normalizer.isNormalized(value, Normalizer.Form.NFKD));
+		// output : e a i _ @
 	}
 }

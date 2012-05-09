@@ -33,10 +33,12 @@ public class PrefixServer {
 		this.terms = new TermFile(this.termFile);
 	}
 
-	public List<String> runQuery(String prefix) {
+	public List<String> runQuery(String pre) {
 
-		// Flatten diacritics and accent marks
-		prefix = FilterUtils.deAccent(prefix);
+		// Flatten diacritics and accent marks (still not working with "ó ì ")
+		//System.out.println("Before:["+pre+"]");
+		String prefix = FilterUtils.unAccent(pre.trim());
+		//System.out.println("After:["+prefix+"]");
 		
 		if (cache.containsKey(prefix)) {
 			System.out.print(" <CACHE HIT> ");

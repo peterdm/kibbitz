@@ -1,7 +1,8 @@
 #!/bin/sh
-export LC_ALL=C
 
-CLASSPATH=../dist/kibbitz.jar
+CLASSPATH=$CLASSPATH:../dist/kibbitz.jar
+
+java -version
 
 java -classpath $CLASSPATH com.searchintuition.kibbitz.PrefixServer $1 $2
 

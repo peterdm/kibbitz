@@ -5,8 +5,8 @@ BEGIN {srand()}
 # queries in the input file
 !/^$/ { 
 	if (rand() <= .2) {
-		# At least 2 characters in simulated as-you-type query
-		num=int(rand() * (length($0)-2)) +  2 
+		# At least 3 characters in simulated as-you-type query
+		num=int(rand() * (length($0)-3)) +  3 
 		print substr($0,1,num) 
 	}
 

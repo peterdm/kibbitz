@@ -40,6 +40,12 @@ public class TermFileTest {
 	}
 	
 	@Test
+	public final void testNPECase() {
+		PrefixServer server = new PrefixServer(5);
+		server.runQueries("/Users/Peter/etsy/data/randoms.testcase");
+	}
+	
+	@Test
 	public final void testServer() {
 		PrefixServer server = new PrefixServer(10);
 		server.runQueries("/Users/Peter/etsy/data/randoms.txt");
