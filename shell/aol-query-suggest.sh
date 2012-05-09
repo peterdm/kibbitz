@@ -11,6 +11,6 @@
 
 CLASSPATH=$CLASSPATH:../dist/kibbitz.jar
 
-java -classpath $CLASSPATH com.searchintuition.kibbitz.PrefixServer $1 $2
+java -Xms256m -Xmx256m -classpath $CLASSPATH com.searchintuition.kibbitz.PrefixServer $1 $2
 
 

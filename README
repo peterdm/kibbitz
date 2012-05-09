@@ -22,8 +22,9 @@ queries were omitted).
 
 Throughput
 
-With about 65% of queries eventually hitting a cache, this single-threaded
-program handled an average of 450qps on a dual-core MacBook Pro.
+With about 65% of queries eventually hitting a cache, this single-threaded program
+returned an average of 520qps on a dual-core MacBook Pro processing 1MM+ queries in 
+about 32 minutes.
 
 The machine was CPU-bound during this test, which probably points to the 
 computing burden of all the string-comparison required by the binary search.
@@ -34,7 +35,7 @@ string-comparisons.
 
 Additionally, with a little extra work, this could be made thread-safe so 
 that multiple requests could be served at one time.  This implementation
-would benefit from additional cpus and more than one disk-controller.
+would benefit from additional cpus and multiple disk-controllers.
 
 
 Index

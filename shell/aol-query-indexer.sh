@@ -40,7 +40,7 @@ cat ../data/queries-*.txt > $INPUTFILE
 
 # Expand index to include forward word-grams
 echo "Creating multi-word grams from search file to capture intra-query occurances"
-java -classpath ../dist/kibbitz.jar com.searchintuition.kibbitz.MultiGramFileGenerator $INPUTFILE $OUTPUTFILE
+java -Xms256m -Xmx256m -classpath ../dist/kibbitz.jar com.searchintuition.kibbitz.MultiGramFileGenerator $INPUTFILE $OUTPUTFILE
 
 # Sort all grams and group by occurance (takes about 20+min)
 echo "Creating a unique query file with document frequency counts"
